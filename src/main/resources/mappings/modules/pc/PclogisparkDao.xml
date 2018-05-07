@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.pc.dao.PclogisparkDao">
+    
+	<sql id="pclogisparkColumns">
+		a.id AS "id",
+		a.park_name AS "parkName",
+		a.park_addr_uuid AS "parkAddrUuid",
+		anfawuliu.getUUIDFullAddress(park_addr_uuid) AS "fullAddress",
+		a.park_remark AS "parkRemark"
+	</sql>
+	
+	<sql id="pclogisparkJoins">
+	</sql>
+    
+	<select id="get" resultType="Pclogispark">
+		SELECT 
+			<include refid="pclogisparkColumns"/>
+		FROM anfawuliu.logistics_park a
+		<include refid="pclogisparkJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="Pclogispark">
+		SELECT 
+			<include refid="pclogisparkColumns"/>
+		FROM anfawuliu.logistics_park a
+		<include refid="pclogisparkJoins"/>
+		<where>
+			del_flag = 0
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="Pclogispark">
+		SELECT 
+			<include refid="pclogisparkColumns"/>
+		FROM anfawuliu.logistics_park a
+		<include refid="pclogisparkJoins"/>
+		<where>
+			del_flag = 0
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO anfawuliu.logistics_park(
+			park_name,
+			park_addr_uuid,
+			park_remark
+		) VALUES (
+			#{parkName},
+			#{parkAddrUuid},
+			#{parkRemark}
+		)
+	</insert>
+	
+	<update id="update">
+	    UPDATE anfawuliu.logistics_park
+		<set>
+		   <if test="parkName != null">park_name = #{parkName},</if>
+		   <if test="parkAddrUuid != null">park_addr_uuid = #{parkAddrUuid},</if>
+		   <if test="parkRemark != null">park_remark = #{parkRemark},</if>	   
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE anfawuliu.logistics_park SET del_flag = 1
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

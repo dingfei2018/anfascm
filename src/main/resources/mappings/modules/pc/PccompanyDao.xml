@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.pc.dao.PccompanyDao">
+    
+	<sql id="pccompanyColumns">
+		a.id AS "id",
+		a.corpname AS "corpname",
+		a.bussiness_code AS "bussinessCode",
+		a.charge_person AS "chargePerson",
+		a.charge_mobile AS "chargeMobile",
+		a.corp_telphone AS "corpTelphone",
+		a.corp_addr_uuid AS "corpAddrUuid",
+		a.cert_img_uuid AS "certImgUuid",
+		a.reg_to_year AS "regToYear",
+		a.is_icap AS "isIcap",
+		a.is_icblack AS "isIcBlack",
+		a.user_id AS "pcuser.id"
+	</sql>
+	
+	<sql id="pccompanyJoins">
+	</sql>
+    
+	<select id="get" resultType="Pccompany">
+		SELECT 
+			<include refid="pccompanyColumns"/>
+		FROM anfawuliu.company a
+		<include refid="pccompanyJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="Pccompany">
+		SELECT 
+			<include refid="pccompanyColumns"/>
+		FROM anfawuliu.company a
+		<include refid="pccompanyJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="Pccompany">
+		SELECT 
+			<include refid="pccompanyColumns"/>
+		FROM anfawuliu.company a
+		<include refid="pccompanyJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO anfawuliu.company(
+			id,
+			corpname,
+			bussiness_code,
+			charge_person,
+			charge_mobile,
+			corp_telphone,
+			corp_addr_uuid,
+			cert_img_uuid
+		) VALUES (
+			#{id},
+			#{corpname},
+			#{bussinessCode},
+			#{chargePerson},
+			#{chargeMobile},
+			#{corpTelphone},
+			#{corpAddrUuid},
+			#{certImgUuid}
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE anfawuliu.company 
+		<set>
+		   <if test="corpname != null">corpname = #{corpname},</if>
+		   <if test="bussinessCode != null">bussiness_code = #{bussinessCode},</if>
+		   <if test="chargePerson != null">charge_person = #{chargePerson},</if>	
+		   <if test="corpTelphone != null">corp_telphone = #{corpTelphone},</if>		   
+		   <if test="regToYear != null">reg_to_year = #{regToYear},</if>
+		   <if test="isIcap != null">is_icap = #{isIcap},</if>
+		   <if test="isIcBlack != null">is_icblack = #{isIcBlack},</if> 
+		   <if test="corpAddrUuid != null">corp_addr_uuid = #{corpAddrUuid},</if>   
+		</set> 
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM anfawuliu.company
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

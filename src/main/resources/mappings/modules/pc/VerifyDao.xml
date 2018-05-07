@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.pc.dao.VerifyDao">
+    
+  <sql id="pcVerifyColumns">
+		pv.id AS `id`,
+		pv.status AS `status`,
+		pv.reason AS `reason`,
+		pv.flow_from AS `flowFrom`,
+		pv.flow_id AS `flowId`,
+		pv.created AS `createTime`,
+		pv.vertified AS `vertifyTime`,
+		pv.scm_checker_id AS `chkUser.id`,
+		su.login_name AS `chkUser.login_name`,		
+		pv.user_id AS `pcuser.id`,
+		pu.mobile AS `pcuser.mobile`,
+		pu.create_time AS `pcuser.createTime`,
+		pu.corpname AS `pcuser.pccompany.corpname`
+	</sql>
+	
+	<sql id="pcVerifyJoins">
+	    JOIN (SELECT user_id, MAX(created) created FROM anfawuliu.scm_verify GROUP BY user_id) pv2 ON pv.user_id = pv2.user_id AND pv.created = pv2.created
+		JOIN anfawuliu.user_company_shop pu ON pu.userid = pv.user_id
+		LEFT JOIN sys_user su  ON su.id = pv.scm_checker_id
+	</sql>    
+    
+	<select id="get" resultType="VerifyData">
+		SELECT 
+			<include refid="pcVerifyColumns"/>
+		FROM anfawuliu.scm_verify pv 
+		    <include refid="pcVerifyJoins"/>
+		WHERE pv.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="VerifyData">
+		SELECT 
+			<include refid="pcVerifyColumns"/>
+		FROM anfawuliu.scm_verify pv 
+		    <include refid="pcVerifyJoins"/>
+		<where>
+		    pu.status = 1
+			<if test="beginDate != null and beginDate != ''">
+				AND pv.created <![CDATA[ >= #{beginDate} ]]>
+			</if>
+			<if test="endDate != null and endDate != ''">
+				AND pv.created <![CDATA[ <= #{endDate} ]]>
+			</if>
+			<if test="pcuser !=null and pcuser.username != null and pcuser.username != ''">
+				AND pu.username <![CDATA[ = #{pcuser.username} ]]>
+			</if>
+			<if test="status != null and status != '-1'">
+				AND pv.status <![CDATA[ = #{status} ]]>
+			</if>	
+			<if test="pcuser != null and pcuser.pccompany != null and pcuser.pccompany.corpname != null and pcuser.pccompany.corpname != ''">
+			    <bind name="corpname" value="'%' + _parameter.pcuser.pccompany.corpname + '%'" />
+				AND pu.corpname  LIKE #{corpname}
+			</if>	
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY create_time DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="getAllVerityImages" resultType="com.thinkgem.jeesite.modules.pc.entity.LibImage">
+		SELECT img.* 
+		FROM anfawuliu.library_image img 
+		RIGHT JOIN anfawuliu.company com ON img.gid = com.cert_img_uuid
+		WHERE com.user_id = #{id}
+	</select>
+	
+	<update id="update">
+		UPDATE anfawuliu.scm_verify SET 	
+			status = #{status},
+			reason = #{reason},
+			vertified = #{vertifyTime},
+			scm_checker_id = #{scmCheckerId}
+		WHERE id = #{id}
+	</update>
+</mapper>

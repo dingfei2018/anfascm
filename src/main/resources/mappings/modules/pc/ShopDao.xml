@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.pc.dao.ShopDao">
+    
+	<sql id="shopColumns">
+		a.id AS "id",
+		a.shop_name AS "shopName",
+		a.shop_subdomain AS "shopSubdomain",
+		a.shop_desc AS "shopDesc",
+		a.shop_desc_short AS "shopDescShort",
+		a.figure_img_gid AS "figureImgGid",
+		a.scroll_img_gid AS "scrollImgGid",
+		a.create_time AS "createTime",
+		a.update_time AS "updateTime",
+		a.theme AS "theme",
+		a.user_id AS "user.id",
+		a.culture_desc AS "cultureDesc",
+		a.culture_img_gid AS "cultureImgGid",
+		a.culture_jzg AS "cultureJzg",
+		a.culture_sm AS "cultureSm",
+		a.show_yyzz AS "showYyzz",
+		a.show_sfz AS "showSfz",
+		a.show_mobile AS "showMobile",
+		a.show_network_mobile AS "showNetworkMobile",
+		u11.name AS "user.name"
+	</sql>
+	
+	<sql id="shopJoins">
+		LEFT JOIN sys_user u11 ON u11.id = a.user_id
+	</sql>
+    
+	<select id="get" resultType="Shop">
+		SELECT 
+			<include refid="shopColumns"/>
+		FROM shop a
+		<include refid="shopJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="Shop">
+		SELECT 
+			<include refid="shopColumns"/>
+		FROM shop a
+		<include refid="shopJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="Shop">
+		SELECT 
+			<include refid="shopColumns"/>
+		FROM shop a
+		<include refid="shopJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO shop(
+			id,
+			shop_name,
+			shop_subdomain,
+			shop_desc,
+			shop_desc_short,
+			figure_img_gid,
+			scroll_img_gid,
+			create_time,
+			update_time,
+			theme,
+			user_id,
+			culture_desc,
+			culture_img_gid,
+			culture_jzg,
+			culture_sm,
+			show_yyzz,
+			show_sfz,
+			show_mobile,
+			show_network_mobile
+		) VALUES (
+			#{id},
+			#{shopName},
+			#{shopSubdomain},
+			#{shopDesc},
+			#{shopDescShort},
+			#{figureImgGid},
+			#{scrollImgGid},
+			#{createTime},
+			#{updateTime},
+			#{theme},
+			#{user.id},
+			#{cultureDesc},
+			#{cultureImgGid},
+			#{cultureJzg},
+			#{cultureSm},
+			#{showYyzz},
+			#{showSfz},
+			#{showMobile},
+			#{showNetworkMobile}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE shop SET 	
+			shop_name = #{shopName},
+			shop_subdomain = #{shopSubdomain},
+			shop_desc = #{shopDesc},
+			shop_desc_short = #{shopDescShort},
+			figure_img_gid = #{figureImgGid},
+			scroll_img_gid = #{scrollImgGid},
+			create_time = #{createTime},
+			update_time = #{updateTime},
+			theme = #{theme},
+			user_id = #{user.id},
+			culture_desc = #{cultureDesc},
+			culture_img_gid = #{cultureImgGid},
+			culture_jzg = #{cultureJzg},
+			culture_sm = #{cultureSm},
+			show_yyzz = #{showYyzz},
+			show_sfz = #{showSfz},
+			show_mobile = #{showMobile},
+			show_network_mobile = #{showNetworkMobile}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM shop
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

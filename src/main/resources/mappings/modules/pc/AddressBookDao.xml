@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.pc.dao.AddressBookDao">
+    
+   <sql id="cmsBookColumns">
+		uuid AS "id",
+		region_code AS "regionCode",
+		town_code AS "townCode",
+		tail_address as "tailAddress",
+		location_xy as "locationXY",
+		CONCAT(anfawuliu.getLongRegion(region_code)," ",tail_address) AS fullAddress,
+		create_time AS "createTime",
+		user_id AS "userId"
+	</sql>
+    
+	<select id="get" resultType="AddressBook">
+		SELECT 
+			<include refid="cmsBookColumns"/>
+		FROM anfawuliu.address_book 
+		<where>
+			 uuid = #{id} AND delete_flag=0
+		</where>
+	</select>
+	
+	<select id="findList" resultType="AddressBook">
+		SELECT 
+			<include refid="cmsBookColumns"/>
+		FROM anfawuliu.address_book 
+		<where>
+			 delete_flag=0
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY create_time DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO anfawuliu.address_book (
+		uuid,
+		region_code,
+		tail_address,
+		create_time,
+		user_id,
+		location_xy
+		) VALUES (
+		#{id},
+		#{regionCode},
+		#{tailAddress},
+		#{createTime},
+		#{userId},
+		#{locationXY}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE anfawuliu.address_book 
+		<set>
+		   <if test="regionCode != null">region_code = #{regionCode},</if>
+		   <if test="tailAddress != null">tail_address = #{tailAddress},</if>
+		   <if test="locationXY != null">location_xy = #{locationXY},</if>	
+		   <if test="townCode != null">town_code = #{townCode},</if>	   
+		</set>		
+		WHERE uuid = #{id}
+	</update>
+		<update id="delete">
+		UPDATE anfawuliu.address_book SET delete_flag=1
+		WHERE uuid = #{id}
+	</update>
+	
+</mapper>

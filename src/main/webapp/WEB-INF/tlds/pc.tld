@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<taglib xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-jsptaglibrary_2_0.xsd"
+	version="2.0">
+
+	<description>JSTL 1.1 functions library</description>
+	<display-name>JSTL functions sys</display-name>
+	<tlib-version>1.1</tlib-version>
+	<short-name>pc</short-name>
+	<uri>http://java.sun.com/jsp/jstl/functionss</uri>
+
+	<function>
+		<description>获取pcuser-usertype类型</description>
+		<name>getPcuserTypeMap</name>
+		<function-class>com.thinkgem.jeesite.modules.pc.utils.PcuserUtils</function-class>
+		<function-signature>java.util.Map getUserTypeMap()</function-signature>
+		<example>${getPcuserTypeMap()}</example>
+	</function>
+	<function>
+		<description>获取pcuser-usertype的描述</description>
+		<name>getPcuserType</name>
+		<function-class>com.thinkgem.jeesite.modules.pc.utils.PcuserUtils</function-class>
+		<function-signature>ava.lang.String getUserTypeName(java.lang.String)</function-signature>
+		<example>${getPcuserType(key)}</example>
+	</function>
+	<function>
+		<description>获取pcuser-status类型</description>
+		<name>getPcuserStatusMap</name>
+		<function-class>com.thinkgem.jeesite.modules.pc.utils.PcuserUtils</function-class>
+		<function-signature>java.util.Map getUserStatusMap()</function-signature>
+		<example>${getPcuserStatusMap()}</example>
+	</function>
+	<function>
+		<description>获取pcuser-status的描述</description>
+		<name>getPcuserStatus</name>
+		<function-class>com.thinkgem.jeesite.modules.pc.utils.PcuserUtils</function-class>
+		<function-signature>java.lang.String getUserStatusName(java.lang.String)</function-signature>
+		<example>${getUserStatusName(key)}</example>
+	</function>
+	<function>
+		<description>获取pcuser-username</description>
+		<name>getPCUserName</name>
+		<function-class>com.thinkgem.jeesite.modules.pc.utils.PcuserUtils</function-class>
+		<function-signature>java.lang.String getPCUserName(java.lang.String)</function-signature>
+		<example>${getPCUserName(id)}</example>
+	</function>
+</taglib>

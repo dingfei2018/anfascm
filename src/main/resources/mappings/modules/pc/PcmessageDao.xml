@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.pc.dao.PcmessageDao">
+    
+	<sql id="pcmessageColumns">
+		a.id AS "id",
+		a.label AS "label",
+		a.content AS "content",
+		a.created AS "created",
+		a.sender AS "sender",
+		a.type AS "type"
+	</sql>
+	
+	<sql id="pcmessageJoins">
+	</sql>
+    
+	<select id="get" resultType="Pcmessage">
+		SELECT 
+			<include refid="pcmessageColumns"/>
+		FROM pcmessage a
+		<include refid="pcmessageJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="Pcmessage">
+		SELECT 
+			<include refid="pcmessageColumns"/>
+		FROM pcmessage a
+		<include refid="pcmessageJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="Pcmessage">
+		SELECT 
+			<include refid="pcmessageColumns"/>
+		FROM pcmessage a
+		<include refid="pcmessageJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO anfawuliu.msg_message(
+			label,
+			content,
+			created,
+			sender,
+			type
+		) VALUES (
+			#{label},
+			#{content},
+			#{created},
+			#{sender},
+			#{type}
+		)
+	</insert>
+	
+	<insert id="sendMsgToUser">
+		INSERT INTO anfawuliu.msg_user(
+			message_id,
+			toer
+		) VALUES (
+			#{id},
+			#{toer}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE pcmessage SET 	
+			label = #{label},
+			content = #{content},
+			created = #{created},
+			sender = #{sender},
+			type = #{type}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM pcmessage
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

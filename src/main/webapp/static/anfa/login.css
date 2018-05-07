@@ -1,0 +1,88 @@
+
+
+*{
+	margin: 0;
+	padding: 0;
+}
+
+
+.head{
+	width: 722px;
+	height: 523px;
+	/*border: 1px solid blue;*/
+	margin: auto;
+	margin-top: 100px;
+	background: url(../img/login_bj.jpg);
+	position: relative;
+}
+
+
+.head p{
+	position: absolute;
+	left: 200px;
+	top: 160px;
+	color: deepskyblue;
+}
+
+.input1{
+	position: absolute;
+	left: 120px;
+	top: 220px;
+	height: 40px;
+	width: 250px;
+	text-indent: 20px;
+	border: 0px;
+}
+
+.input2{
+	position: absolute;
+	left: 120px;
+	top: 277px;
+	width: 250px;
+	height: 40px;
+	text-indent: 20px;
+	border: 0px;
+}
+.input3{
+	position: absolute;
+	left: 110px;
+	top: 360px;
+	width: 248px;
+	height: 40px;
+	border: 0px;
+	background-color: #0b4c94;
+	color: white;
+	border-radius: 5px;
+	cursor: pointer;
+    
+}
+.input3 a{
+	text-decoration: none;
+	color: white;
+}
+.label1{
+	display: inline-block;
+	width: 30px;
+    border: 1px solid white;
+    height: 38px;
+    margin-left: 30px;
+    position: absolute;
+    left: 62px;
+    top: 220px;
+    background: url(../img/login_1.jpg) no-repeat center;
+    background-color: white;
+    
+}
+
+.label2{
+	display: inline-block;
+	width: 30px;
+    border: 1px solid white;
+    height: 38px;
+    margin-left: 30px;
+    position: absolute;
+    left: 62px;
+    top: 277px;
+    background: url(../img/login_2.jpg) no-repeat center;
+    background-color: white;
+}

@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.pc.dao.PcuserDao">
+
+	<sql id="pcuserColumns">
+		a.userid AS "id",
+		a.username AS "username",
+		a.realname AS "realname",
+		a.mobile AS "mobile",
+		a.is_onshop AS "isOnshop",
+		a.is_transline AS "isTransline",
+		a.usertype AS "usertype",
+		a.create_time AS "createTime",
+		a.update_time AS "updateTime",
+		a.email AS	"email",
+		a.remark AS "remark",
+		a.create_id AS "createId",
+		a.title_img_uuid AS "titleImgUuid",
+		a.status AS "status",
+		a.depart_id AS "departId",
+		a.u_end_time AS "endTime",
+		a.is_locked AS "isLocked",
+		a.company_id AS "pccompany.id",
+		a.corpname AS "pccompany.corpname",
+		a.corp_telphone AS "pccompany.corpTelphone",
+		a.shop_id AS "shop.id"
+	</sql>
+
+	<sql id="pcuserJoins">
+		LEFT JOIN anfawuliu.company c ON c.user_id = a.userid
+	</sql>
+
+	<select id="get" resultType="Pcuser">
+		SELECT
+		<include refid="pcuserColumns" />
+		FROM anfawuliu.user_company_shop a
+		<!-- <include refid="pcuserJoins" /> -->
+		WHERE a.userid = #{id}
+	</select>
+
+	<select id="findList" resultType="Pcuser">
+		SELECT
+		<include refid="pcuserColumns" />
+		FROM anfawuliu.user_company_shop a
+		<!-- <include refid="pcuserJoins" /> -->
+		<where>
+			a.status = 1
+			<if test="beginDate != null and beginDate != ''">
+				AND a.create_time <![CDATA[ >= #{beginDate} ]]>
+			</if>
+			<if test="endDate != null and endDate != ''">
+				AND a.create_time <![CDATA[ <= #{endDate} ]]>
+			</if>
+			<if test="usertype != null and usertype != '' and usertype != '-1' ">
+				AND a.usertype <![CDATA[ = #{usertype} ]]>
+			</if>
+			<if test="mobile != null and mobile != ''">
+				AND a.mobile <![CDATA[ = #{mobile} ]]>
+			</if>
+			<if test="pccompany != null and pccompany.corpname != null and pccompany.corpname != ''">
+			    <bind name="corpname" value="'%' + _parameter.pccompany.corpname + '%'" />
+				AND a.corpname  LIKE #{corpname}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			    ORDER BY create_time DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="Pcuser">
+		SELECT
+		<include refid="pcuserColumns" />
+		FROM anfawuliu.user_company_shop a
+		<!-- <include refid="pcuserJoins" /> -->
+		<where>
+			a.status = 1
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO anfawuliu.sys_user(
+		userid,
+		username,
+		realname,
+		password,
+		mobile,
+		is_onshop,
+		is_transline,
+		usertype,
+		create_time,
+		update_time,
+		email,
+		remark,
+		create_id,
+		role_id,
+		title_img_uuid,
+		depart_id,
+		third_id,
+		end_time,
+		is_locked
+		) VALUES (
+		#{id},
+		#{username},
+		#{realname},
+		#{password},
+		#{mobile},
+		#{isOnshop},
+		#{isTransline},
+		#{usertype},
+		#{createTime},
+		#{updateTime},
+		#{email},
+		#{remark},
+		#{createId},
+		#{roleId},
+		#{titleImgUuid},
+		#{departId},
+		#{thirdId},
+		#{endTime},
+		#{isLocked}
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE anfawuliu.sys_user
+		<set>
+			<if test="username != null"> username = #{username}, </if>
+			<if test="realname != null"> realname = #{realname}, </if>
+			<if test="isOnshop != null"> is_onshop = #{isOnshop}, </if>
+			<if test="isTransline != null"> is_transline = #{isTransline}, </if>
+			<if test="mobile != null"> mobile = #{mobile}, </if>
+			<if test="passwordModify=='yes' and password != null and password != ''">
+				password = #{password},
+			</if>
+			<if test="usertype != null"> usertype = #{usertype}, </if>
+			<if test="email != null"> email = #{email}, </if>
+			<if test="remark != null"> remark = #{remark}, </if>
+			<if test="status != null"> status = #{status}, </if>
+			<if test="isLocked != null"> is_locked = #{isLocked}, </if>
+		</set>
+		WHERE userid = #{id}
+	</update>
+
+	<update id="delete">
+		UPDATE anfawuliu.sys_user SET status=0
+		WHERE userid = #{id}
+	</update>
+
+</mapper>
